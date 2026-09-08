@@ -2,6 +2,7 @@ package ru.practicum.yandex.telemetry.collector.service.handlers.hub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.yandex.telemetry.collector.exceptions.UnknownTypeException;
 import ru.practicum.yandex.telemetry.collector.mapper.HubEventMapper;
 import ru.practicum.yandex.telemetry.collector.messaging.KafkaEventProducer;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 @Slf4j
 public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implements HubEventHandler {
+    @Autowired
     protected KafkaEventProducer producer;
 
     protected abstract T toAvro(HubEvent event);
