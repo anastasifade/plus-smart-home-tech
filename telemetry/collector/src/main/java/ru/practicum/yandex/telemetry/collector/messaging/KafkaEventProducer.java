@@ -34,7 +34,7 @@ public class KafkaEventProducer implements AutoCloseable {
     @Override
     public void close() {
         producer.flush();
-        producer.close(Duration.ofMillis(1000));
+        producer.close(Duration.ofMillis(5000));
         log.info("Kafka producer closed.");
     }
 }
