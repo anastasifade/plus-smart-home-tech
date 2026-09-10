@@ -28,7 +28,7 @@ public class EventController {
     public void postSensorEvent(@Valid @RequestBody SensorEvent event) {
         log.info("POST /events/sensors request received by EventController.");
         log.debug("Request to post sensor event: {}.", event);
-        if (event.getType().equals(SensorEventType.UNKNOWN_EVENT)) {
+        if (SensorEventType.UNKNOWN_EVENT == event.getType()) {
             log.debug("Sensor event type unknown, failed to save event.");
             throw new UnknownTypeException("Unknown sensor event type.");
         }
@@ -40,7 +40,7 @@ public class EventController {
     public void postHubEvent(@Valid @RequestBody HubEvent event) {
         log.info("POST /events/hubs request received by EventController.");
         log.debug("Request to post hub event: {}.", event);
-        if (event.getType().equals(HubEventType.UNKNOWN)) {
+        if (HubEventType.UNKNOWN == event.getType()) {
             log.debug("Hub event type unknown, failed to save event.");
             throw new UnknownTypeException("Unknown hub event type.");
         }

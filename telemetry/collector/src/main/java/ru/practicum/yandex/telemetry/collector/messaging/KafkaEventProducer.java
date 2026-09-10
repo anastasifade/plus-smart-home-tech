@@ -10,6 +10,7 @@ import ru.practicum.yandex.telemetry.collector.constants.KafkaTopics;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 
+import java.time.Duration;
 import java.util.concurrent.Future;
 
 @Slf4j
@@ -33,7 +34,7 @@ public class KafkaEventProducer implements AutoCloseable {
     @Override
     public void close() {
         producer.flush();
-        producer.close();
+        producer.close(Duration.ofMillis(1000));
         log.info("Kafka producer closed.");
     }
 }
