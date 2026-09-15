@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.yandex.telemetry.collector.exceptions.UnknownTypeException;
 import ru.practicum.yandex.telemetry.collector.mapper.HubEventMapper;
 import ru.practicum.yandex.telemetry.collector.messaging.KafkaEventProducer;
-import ru.practicum.yandex.telemetry.collector.model.hub.HubEvent;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 @Slf4j
@@ -14,14 +14,14 @@ public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implemen
     @Autowired
     protected KafkaEventProducer producer;
 
-    protected abstract T toAvro(HubEvent event);
+    protected abstract T toAvro(HubEventProto event);
 
-    public void handle(HubEvent event) {
-        if (!event.getType().equals(getType())) {
+    public void handle(HubEventProto event) {
+        if (!event.getPayloadCase().equals(getType())) {
             log.warn("Unknown event type in HubEventHandler. Type received: {}. Type expected: {}.",
-                    event.getType(), getType());
+                    event.getPayloadCase(), getType());
             throw new UnknownTypeException(String.format("Unknown event type: %s. Type expected: %s.",
-                    event.getType(), getType()));
+                    event.getPayloadCase(), getType()));
         }
 
         T payload = toAvro(event);

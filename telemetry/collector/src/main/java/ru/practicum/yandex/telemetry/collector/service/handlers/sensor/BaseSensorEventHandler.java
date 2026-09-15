@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.yandex.telemetry.collector.exceptions.UnknownTypeException;
 import ru.practicum.yandex.telemetry.collector.mapper.SensorEventMapper;
 import ru.practicum.yandex.telemetry.collector.messaging.KafkaEventProducer;
-import ru.practicum.yandex.telemetry.collector.model.sensor.SensorEvent;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 
 @Slf4j
@@ -14,14 +14,14 @@ public abstract class BaseSensorEventHandler<T extends SpecificRecordBase> imple
     @Autowired
     protected KafkaEventProducer producer;
 
-    protected abstract T toAvro(SensorEvent event);
+    protected abstract T toAvro(SensorEventProto event);
 
-    public void handle(SensorEvent event) {
-        if (!event.getType().equals(getType())) {
+    public void handle(SensorEventProto event) {
+        if (!event.getPayloadCase().equals(getType())) {
             log.warn("Unknown event type in SensorEventHandler. Type received: {}. Type expected: {}.",
-                    event.getType(), getType());
+                    event.getPayloadCase(), getType());
             throw new UnknownTypeException(String.format("Unknown event type: %s. Type expected: %s.",
-                    event.getType(), getType()));
+                    event.getPayloadCase(), getType()));
         }
 
         T payload = toAvro(event);

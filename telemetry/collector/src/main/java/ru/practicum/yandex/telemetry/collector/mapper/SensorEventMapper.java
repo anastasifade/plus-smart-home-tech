@@ -2,21 +2,23 @@ package ru.practicum.yandex.telemetry.collector.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.practicum.yandex.telemetry.collector.model.sensor.*;
+import ru.yandex.practicum.grpc.telemetry.event.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
+
+import java.time.Instant;
 
 @UtilityClass
 public class SensorEventMapper {
-    public <T extends SpecificRecordBase> SensorEventAvro toAvro(SensorEvent event, T payload) {
+    public <T extends SpecificRecordBase> SensorEventAvro toAvro(SensorEventProto event, T payload) {
         return SensorEventAvro.newBuilder()
                 .setHubId(event.getHubId())
                 .setId(event.getId())
-                .setTimestamp(event.getTimestamp())
+                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos()))
                 .setPayload(payload)
                 .build();
     }
 
-    public ClimateSensorAvro toAvro(ClimateSensorEvent event) {
+    public ClimateSensorAvro toAvro(ClimateSensorEventProto event) {
         return ClimateSensorAvro.newBuilder()
                 .setTemperatureC(event.getTemperatureC())
                 .setHumidity(event.getHumidity())
@@ -24,14 +26,14 @@ public class SensorEventMapper {
                 .build();
     }
 
-    public LightSensorAvro toAvro(LightSensorEvent event) {
+    public LightSensorAvro toAvro(LightSensorEventProto event) {
         return LightSensorAvro.newBuilder()
                 .setLinkQuality(event.getLinkQuality())
                 .setLuminosity(event.getLuminosity())
                 .build();
     }
 
-    public MotionSensorAvro toAvro(MotionSensorEvent event) {
+    public MotionSensorAvro toAvro(MotionSensorEventProto event) {
         return MotionSensorAvro.newBuilder()
                 .setLinkQuality(event.getLinkQuality())
                 .setMotion(event.getMotion())
@@ -39,13 +41,13 @@ public class SensorEventMapper {
                 .build();
     }
 
-    public SwitchSensorAvro toAvro(SwitchSensorEvent event) {
+    public SwitchSensorAvro toAvro(SwitchSensorEventProto event) {
         return SwitchSensorAvro.newBuilder()
                 .setState(event.getState())
                 .build();
     }
 
-    public TemperatureSensorAvro toAvro(TemperatureSensorEvent event) {
+    public TemperatureSensorAvro toAvro(TemperatureSensorEventProto event) {
         return TemperatureSensorAvro.newBuilder()
                 .setTemperatureC(event.getTemperatureC())
                 .setTemperatureF(event.getTemperatureF())
