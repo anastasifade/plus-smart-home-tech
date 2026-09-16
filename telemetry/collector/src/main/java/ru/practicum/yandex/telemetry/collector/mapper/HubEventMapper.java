@@ -2,53 +2,49 @@ package ru.practicum.yandex.telemetry.collector.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.practicum.yandex.telemetry.collector.model.hub.HubEvent;
-import ru.practicum.yandex.telemetry.collector.model.hub.device.DeviceAddedEvent;
-import ru.practicum.yandex.telemetry.collector.model.hub.device.DeviceRemovedEvent;
-import ru.practicum.yandex.telemetry.collector.model.hub.scenario.DeviceAction;
-import ru.practicum.yandex.telemetry.collector.model.hub.scenario.ScenarioAddedEvent;
-import ru.practicum.yandex.telemetry.collector.model.hub.scenario.ScenarioCondition;
-import ru.practicum.yandex.telemetry.collector.model.hub.scenario.ScenarioRemovedEvent;
+import ru.yandex.practicum.grpc.telemetry.event.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
+
+import java.time.Instant;
 
 @UtilityClass
 public class HubEventMapper {
-    public <T extends SpecificRecordBase> HubEventAvro toAvro(HubEvent event, T payload) {
+    public <T extends SpecificRecordBase> HubEventAvro toAvro(HubEventProto event, T payload) {
         return HubEventAvro.newBuilder()
                 .setHubId(event.getHubId())
-                .setTimestamp(event.getTimestamp())
+                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos()))
                 .setPayload(payload)
                 .build();
     }
 
-    public DeviceAddedEventAvro toAvro(DeviceAddedEvent event) {
+    public DeviceAddedEventAvro toAvro(DeviceAddedEventProto event) {
         return DeviceAddedEventAvro.newBuilder()
                 .setId(event.getId())
-                .setType(DeviceTypeAvro.valueOf(event.getDeviceType().toString()))
+                .setType(DeviceTypeAvro.valueOf(event.getType().toString()))
                 .build();
     }
 
-    public DeviceRemovedEventAvro toAvro(DeviceRemovedEvent event) {
+    public DeviceRemovedEventAvro toAvro(DeviceRemovedEventProto event) {
         return DeviceRemovedEventAvro.newBuilder()
                 .setId(event.getId())
                 .build();
     }
 
-    public ScenarioAddedEventAvro toAvro(ScenarioAddedEvent event) {
+    public ScenarioAddedEventAvro toAvro(ScenarioAddedEventProto event) {
         return ScenarioAddedEventAvro.newBuilder()
                 .setName(event.getName())
-                .setActions(event.getActions()
+                .setActions(event.getActionList()
                         .stream()
                         .map(HubEventMapper::toAvro)
                         .toList())
-                .setConditions(event.getConditions()
+                .setConditions(event.getConditionList()
                         .stream()
                         .map(HubEventMapper::toAvro)
                         .toList())
                 .build();
     }
 
-    public DeviceActionAvro toAvro(DeviceAction action) {
+    public DeviceActionAvro toAvro(DeviceActionProto action) {
         return DeviceActionAvro.newBuilder()
                 .setSensorId(action.getSensorId())
                 .setType(ActionTypeAvro.valueOf(action.getType().toString()))
@@ -56,16 +52,16 @@ public class HubEventMapper {
                 .build();
     }
 
-    public ScenarioConditionAvro toAvro(ScenarioCondition condition) {
+    public ScenarioConditionAvro toAvro(ScenarioConditionProto condition) {
         return ScenarioConditionAvro.newBuilder()
                 .setSensorId(condition.getSensorId())
-                .setValue(condition.getValue())
+                .setValue(condition.hasBoolValue() ? condition.getBoolValue() : condition.getIntValue())
                 .setType(ConditionTypeAvro.valueOf(condition.getType().toString()))
                 .setOperation(ConditionOperationAvro.valueOf(condition.getOperation().toString()))
                 .build();
     }
 
-    public ScenarioRemovedEventAvro toAvro(ScenarioRemovedEvent event) {
+    public ScenarioRemovedEventAvro toAvro(ScenarioRemovedEventProto event) {
         return ScenarioRemovedEventAvro.newBuilder()
                 .setName(event.getName())
                 .build();
