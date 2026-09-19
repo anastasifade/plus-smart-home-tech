@@ -1,4 +1,4 @@
-package ru.practicum.yandex.telemetry.collector.messaging;
+package ru.yandex.practicum.telemetry.serialization.avro.serializer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.io.BinaryEncoder;
@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Slf4j
-public class EventAvroSerializer implements Serializer<SpecificRecordBase> {
+public class SmartHomeTechAvroSerializer implements Serializer<SpecificRecordBase> {
     private final EncoderFactory encoderFactory = EncoderFactory.get();
     private BinaryEncoder encoder;
 
