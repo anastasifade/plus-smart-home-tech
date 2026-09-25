@@ -1,5 +1,6 @@
 package ru.yandex.practicum.telemetry.config;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-@Getter
+@Getter(value = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "kafka")
 public class KafkaAggregatorConfig {
