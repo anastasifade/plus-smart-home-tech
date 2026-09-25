@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.storage;
+package ru.yandex.practicum.telemetry.dal;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;

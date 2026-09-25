@@ -17,4 +17,4 @@ kafka:
 
 logging:
   level:
-    ru.yandex: TRACE
+    ru.yandex: DEBUG

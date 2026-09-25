@@ -7,7 +7,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.telemetry.mapper.SnapshotMapper;
-import ru.yandex.practicum.telemetry.storage.SnapshotStorage;
+import ru.yandex.practicum.telemetry.dal.SnapshotStorage;
 
 import java.util.Optional;
 
