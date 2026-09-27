@@ -3,12 +3,10 @@ package ru.practicum.yandex.telemetry.collector.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.yandex.telemetry.collector.exceptions.UnknownTypeException;
-import ru.practicum.yandex.telemetry.collector.model.hub.HubEvent;
-import ru.practicum.yandex.telemetry.collector.model.hub.HubEventType;
-import ru.practicum.yandex.telemetry.collector.model.sensor.SensorEvent;
-import ru.practicum.yandex.telemetry.collector.model.sensor.SensorEventType;
 import ru.practicum.yandex.telemetry.collector.service.handlers.hub.HubEventHandler;
 import ru.practicum.yandex.telemetry.collector.service.handlers.sensor.SensorEventHandler;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 
 import java.util.List;
 import java.util.Map;
@@ -19,8 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class EventServiceImpl implements EventService {
 
-    Map<HubEventType, HubEventHandler> hubEventHandlers;
-    Map<SensorEventType, SensorEventHandler> sensorEventHandlers;
+    Map<HubEventProto.PayloadCase, HubEventHandler> hubEventHandlers;
+    Map<SensorEventProto.PayloadCase, SensorEventHandler> sensorEventHandlers;
 
     public EventServiceImpl(List<HubEventHandler> hubEventHandlers,
                             List<SensorEventHandler> sensorEventHandlers) {
@@ -31,23 +29,23 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void postSensorEvent(SensorEvent event) {
+    public void collectSensorEvent(SensorEventProto event) {
         log.info("New sensor event collected by EventService.");
-        SensorEventHandler handler = sensorEventHandlers.get(event.getType());
+        SensorEventHandler handler = sensorEventHandlers.get(event.getPayloadCase());
         if (handler == null) {
-            log.warn("No handler found for sensor event type: {}.", event.getType());
-            throw new UnknownTypeException(String.format("Unknown sensor event type: %s.", event.getType()));
+            log.warn("No handler found for sensor event type: {}.", event.getPayloadCase());
+            throw new UnknownTypeException(String.format("Unknown sensor event type: %s.", event.getPayloadCase()));
         }
         handler.handle(event);
     }
 
     @Override
-    public void postHubEvent(HubEvent event) {
+    public void collectHubEvent(HubEventProto event) {
         log.info("New hub event collected by EventService.");
-        HubEventHandler handler = hubEventHandlers.get(event.getType());
+        HubEventHandler handler = hubEventHandlers.get(event.getPayloadCase());
         if (handler == null) {
-            log.warn("No handler found for hub event type: {}.", event.getType());
-            throw new UnknownTypeException(String.format("Unknown hub event type: %s.", event.getType()));
+            log.warn("No handler found for hub event type: {}.", event.getPayloadCase());
+            throw new UnknownTypeException(String.format("Unknown hub event type: %s.", event.getPayloadCase()));
         }
         handler.handle(event);
     }
