@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/telemetry_analyzer
+    username: dbuser
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+
+kafka:
+  bootstrap-servers: "localhost:9092"
+  consumer:
+    common:
+      "key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer"
+    hubs:
+      "value.deserializer": "ru.yandex.practicum.telemetry.serialization.avro.deserializer.HubEventDeserializer"
+      "group.id": "analyzer-hubs"
+    snapshots:
+      "value.deserializer": "ru.yandex.practicum.telemetry.serialization.avro.deserializer.SensorsSnapshotDeserializer"
+      "group.id": "analyzer-snapshots"
+  topics:
+    hubs: "telemetry.hubs.v1"
+    snapshots: "telemetry.snapshots.v1"
+
+grpc:
+  client:
+    hub-router:
+      address: 'static://localhost:59090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

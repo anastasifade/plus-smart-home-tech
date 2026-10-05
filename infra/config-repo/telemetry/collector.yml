@@ -1,0 +1,11 @@
+kafka:
+  properties:
+    "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
+    "value.serializer": "ru.yandex.practicum.telemetry.serialization.avro.serializer.SmartHomeTechAvroSerializer"
+  topics:
+    sensors: "telemetry.sensors.v1"
+    hubs: "telemetry.hubs.v1"
+
+grpc:
+  server:
+    port: 59091
