@@ -5,10 +5,15 @@ spring:
 
 logging:
   level:
-    ru.yandex.practicum.telemetry: WARN
+    ru.yandex.practicum.telemetry: INFO
     org:
-      springframework: INFO
-      apache.kafka: INFO
+      springframework: WARN
+      apache.kafka: WARN
 
 kafka:
   bootstrap-servers: "localhost:9092"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
