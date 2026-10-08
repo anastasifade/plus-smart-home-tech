@@ -2,21 +2,26 @@ package ru.yandex.practicum.product.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
+import ru.yandex.practicum.common.validation.NullOrNotBlank;
+
 import java.math.BigDecimal;
 
 public record UpdateProductRequest(
 
-        @Size(max = 255, message = "Название не может быть длиннее 255 символов")
+        @NullOrNotBlank(message = "Product name cannot be blank.")
+        @Size(max = 255, message = "Product name cannot exceed 255 characters.")
         String name,
 
-        @Size(max = 2000, message = "Описание не может быть длиннее 2000 символов")
+        @NullOrNotBlank(message = "Product description cannot be blank.")
+        @Size(max = 2000, message = "Product description cannot exceed 2000 characters.")
         String description,
 
-        @DecimalMin(value = "0.01", message = "Цена должна быть больше нуля")
+        @DecimalMin(value = "0.01", message = "Product price must be above 0.00.")
         BigDecimal price,
 
         Long categoryId,
 
+        @NullOrNotBlank(message = "Product image URL cannot be blank.")
         String imageUrl,
 
         Boolean active
