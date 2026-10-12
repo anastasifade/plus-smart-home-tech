@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -47,7 +47,8 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto create(@Valid @RequestBody CreateProductRequest request) {
-        log.info("New request: POST /products.");
+        log.info("New request: POST /products. Creating product [name = {}, price = {}].",
+                request.name(), request.price());
         log.debug("Request to create product: {}.", request);
         return service.create(request);
     }

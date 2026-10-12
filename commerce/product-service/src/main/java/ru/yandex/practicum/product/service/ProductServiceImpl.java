@@ -76,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto update(Long id, UpdateProductRequest updateRequest) {
         log.debug("Product service: request to update product [id = {}].", id);
 
@@ -84,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
                 categoryService.findCategoryById(updateRequest.categoryId()) : null;
 
         ProductMapper.updateProduct(product, updateRequest, category);
+        repository.save(product);
 
         log.info("Product [id = {}] updated.", id);
         return toDto(product);

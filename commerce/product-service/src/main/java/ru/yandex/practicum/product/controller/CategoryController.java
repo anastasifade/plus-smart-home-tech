@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -34,7 +34,7 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@Valid @RequestBody CreateCategoryRequest request) {
-        log.info("New request: POST /categories.");
+        log.info("New request: POST /categories. Creating category [name={}].", request.name());
         log.debug("Request to create category: {}.", request);
         return service.create(request);
     }

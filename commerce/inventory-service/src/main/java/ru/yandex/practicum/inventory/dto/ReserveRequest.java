@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 public record ReserveRequest(
 
-        @NotNull(message = "ID товара обязателен")
+        @NotNull(message = "Product ID is required.")
         Long productId,
 
-        @NotNull(message = "Количество обязательно")
-        @Min(value = 1, message = "Количество должно быть не менее 1")
+        @NotNull(message = "Product quantity is required.")
+        @Min(value = 1, message = "Product quantity cannot be less than 1.")
         Integer quantity
 ) {
 }

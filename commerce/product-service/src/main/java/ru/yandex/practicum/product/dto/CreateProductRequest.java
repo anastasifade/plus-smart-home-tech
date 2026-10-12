@@ -1,7 +1,7 @@
 package ru.yandex.practicum.product.dto;
 
 import jakarta.validation.constraints.*;
-import ru.yandex.practicum.common.validation.NullOrNotBlank;
+import ru.yandex.practicum.product.validation.NullOrNotBlank;
 
 import java.math.BigDecimal;
 

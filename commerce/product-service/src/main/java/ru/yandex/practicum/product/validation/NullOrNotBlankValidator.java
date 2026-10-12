@@ -1,4 +1,4 @@
-package ru.yandex.practicum.common.validation;
+package ru.yandex.practicum.product.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
