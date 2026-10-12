@@ -9,14 +9,14 @@ import java.util.List;
 
 public record CreateOrderRequest(
 
-        @NotBlank(message = "Имя покупателя обязательно")
+        @NotBlank(message = "Customer name is required.")
         String customerName,
 
-        @NotBlank(message = "Email обязателен")
-        @Email(message = "Некорректный формат email")
+        @NotBlank(message = "Email is required.")
+        @Email(message = "Invalid email.")
         String customerEmail,
 
-        @NotEmpty(message = "Заказ должен содержать хотя бы один товар")
+        @NotEmpty(message = "An order must contain at least one item.")
         @Valid
         List<OrderItemRequest> items
 ) {

@@ -20,14 +20,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(NotFoundException e) {
-        log.warn("Ресурс не найден: {}", e.getMessage());
+        log.warn("Resource not found: {}", e.getMessage());
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
 
     @ExceptionHandler(InsufficientStockException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleInsufficientStock(InsufficientStockException e) {
-        log.warn("Недостаточно товара: {}", e.getMessage());
+        log.warn("Insufficient stock: {}", e.getMessage());
+        return new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(ItemAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleAlreaadyExists(ItemAlreadyExistsException e) {
+        log.warn("Conflict: item already exists: {}", e.getMessage());
         return new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
     }
 
@@ -38,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleOptimisticLock(ObjectOptimisticLockingFailureException e) {
-        log.warn("Конфликт конкурентного доступа: {}", e.getMessage());
+        log.warn("Concurrent access conflict: {}", e.getMessage());
         return new ErrorResponse(HttpStatus.CONFLICT.value(),
                 "Конфликт конкурентного доступа. Данные были изменены другим запросом. Повторите операцию.");
     }
@@ -46,7 +53,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgument(IllegalArgumentException e) {
-        log.warn("Некорректный запрос: {}", e.getMessage());
+        log.warn("Incorrect request: {}", e.getMessage());
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
@@ -56,14 +63,14 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        log.warn("Ошибка валидации: {}", errors);
+        log.warn("Validation exception: {}", errors);
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Ошибка валидации", errors);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleGeneral(Exception e) {
-        log.error("Внутренняя ошибка сервера", e);
+        log.error("Internal server error.", e);
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Внутренняя ошибка сервера");
     }
 }
