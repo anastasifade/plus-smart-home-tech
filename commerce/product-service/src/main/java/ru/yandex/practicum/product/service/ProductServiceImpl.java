@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findAll() {
         log.debug("Product service: request to find all products.");
-        return toDto(repository.findAll());
+        return toDto(repository.findByActive(true));
 
     }
 

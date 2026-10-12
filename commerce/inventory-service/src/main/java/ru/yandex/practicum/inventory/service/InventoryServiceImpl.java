@@ -10,6 +10,7 @@ import ru.yandex.practicum.inventory.dto.ReserveResponse;
 import ru.yandex.practicum.inventory.dto.UpdateInventoryRequest;
 import ru.yandex.practicum.inventory.entity.Inventory;
 import ru.yandex.practicum.inventory.exception.InsufficientStockException;
+import ru.yandex.practicum.inventory.exception.ItemAlreadyExistsException;
 import ru.yandex.practicum.inventory.exception.NotFoundException;
 import ru.yandex.practicum.inventory.mapper.InventoryMapper;
 import ru.yandex.practicum.inventory.repository.InventoryRepository;
@@ -40,6 +41,12 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional
     public InventoryDto createInventoryItem(UpdateInventoryRequest request) {
         log.debug("Inventory service: request to create new inventory item.");
+
+        if (repository.existsByProductId(request.productId())) {
+            log.warn("No inventory items created: item for product [id={}] already exists.", request.productId());
+            throw new ItemAlreadyExistsException(String.format("Inventory item for product [id = %d] already exists.",
+                    request.productId()));
+        }
 
         Inventory item = InventoryMapper.toInventoryItem(request);
         Long id = repository.save(item).getId();
