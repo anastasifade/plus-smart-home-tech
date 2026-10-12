@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS order_items(
     product_name VARCHAR(255) NOT NULL,
     quantity INTEGER NOT NULL,
     price NUMERIC(19, 4) NOT NULL,
-    order_id BIGINT REFERENCES orders(id) NOT NULL ON DELETE CASCADE
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE
 );
