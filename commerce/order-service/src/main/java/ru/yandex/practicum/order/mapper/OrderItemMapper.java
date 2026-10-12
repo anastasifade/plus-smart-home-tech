@@ -3,7 +3,6 @@ package ru.yandex.practicum.order.mapper;
 import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.order.dto.OrderItemDto;
 import ru.yandex.practicum.order.dto.OrderItemRequest;
-import ru.yandex.practicum.order.entity.Order;
 import ru.yandex.practicum.order.entity.OrderItem;
 
 import java.math.RoundingMode;
