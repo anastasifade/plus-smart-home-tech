@@ -13,6 +13,7 @@ import ru.yandex.practicum.product.service.CategoryService;
 import java.util.List;
 
 @Slf4j
+@Loggable
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -20,21 +21,18 @@ public class CategoryController {
 
     private final CategoryService service;
 
-    @Loggable
     @GetMapping
     public List<CategoryDto> findAll() {
         log.info("New request: GET /categories.");
         return service.findAll();
     }
 
-    @Loggable
     @GetMapping("/{id}")
     public CategoryDto findById(@PathVariable Long id) {
         log.info("New request: GET /categories/{}.", id);
         return service.findById(id);
     }
 
-    @Loggable
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@Valid @RequestBody CreateCategoryRequest request) {

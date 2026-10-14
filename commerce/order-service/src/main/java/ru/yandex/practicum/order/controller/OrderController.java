@@ -14,6 +14,7 @@ import ru.yandex.practicum.order.service.OrderService;
 import java.util.List;
 
 @Slf4j
+@Loggable
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
@@ -21,28 +22,24 @@ public class OrderController {
 
     private final OrderService service;
 
-    @Loggable
     @GetMapping
     public List<OrderDto> findAll() {
         log.info("New request: GET /orders.");
         return service.findAll();
     }
 
-    @Loggable
     @GetMapping("/by-email")
     public List<OrderDto> findByEmail(@RequestParam @Email String email) {
         log.info("New request: GET /orders/by-email?{}.", email);
         return service.findByClient(email);
     }
 
-    @Loggable
     @GetMapping("/{id}")
     public OrderDto findById(@PathVariable Long id) {
         log.info("New request: GET /orders/{}.", id);
         return service.findById(id);
     }
 
-    @Loggable
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto create(@Valid @RequestBody CreateOrderRequest request) {

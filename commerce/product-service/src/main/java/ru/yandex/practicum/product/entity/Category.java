@@ -14,10 +14,10 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     @Column(length = 500)
-    String description;
+    private String description;
 
     @Override
     public String toString() {
