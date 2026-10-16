@@ -24,8 +24,8 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public Set<ProductDto> findAll() {
-        return service.findAll();
+    public Set<ProductDto> findAll(@RequestParam(value = "ids", required = false) Set<Long> ids) {
+        return ids == null ? service.findAll() : service.findAllByIds(ids);
     }
 
     @GetMapping("/category/{categoryId}")
@@ -36,11 +36,6 @@ public class ProductController {
     @GetMapping("/search")
     public Set<ProductDto> search(@RequestParam String query) {
         return service.search(query);
-    }
-
-    @GetMapping
-    public Set<ProductDto> findAllByIds(@RequestParam("ids") Set<Long> ids) {
-        return service.findAllByIds(ids);
     }
 
     @Loggable
