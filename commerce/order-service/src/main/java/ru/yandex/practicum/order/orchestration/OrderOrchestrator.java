@@ -1,6 +1,5 @@
 package ru.yandex.practicum.order.orchestration;
 
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,7 +58,7 @@ public class OrderOrchestrator {
         Set<ProductDto> products;
 
         try {
-            products = productClient.getProductsById(ids);
+            products = productClient.getProductsByIds(ids);
         } catch (BadRequestException | ConflictException e) {
             throw new OrderProcessingException("Could not process order.");
         }

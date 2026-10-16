@@ -21,7 +21,7 @@ public interface InventoryService {
 
     ReserveResponse reserveItem(ReserveRequest request);
 
-    void releaseItems(Set<ReserveRequest> requests);
+    Set<ReserveResponse> releaseItems(Set<ReserveRequest> requests);
 
-    void releaseItem(ReserveRequest request);
+    ReserveResponse releaseItem(ReserveRequest request);
 }

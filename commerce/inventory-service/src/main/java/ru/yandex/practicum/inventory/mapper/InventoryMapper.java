@@ -33,4 +33,12 @@ public class InventoryMapper {
                 "Product successfully reserved."
         );
     }
+
+    public ReserveResponse toSuccessfulReleaseReserveResponse(Integer availableQuantity) {
+        return new ReserveResponse(
+                true,
+                availableQuantity,
+                "Reservation successfully released."
+        );
+    }
 }

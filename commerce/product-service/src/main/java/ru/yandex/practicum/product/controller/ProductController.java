@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/batch")
-    public Set<ProductDto> findAllByIds(@RequestBody Set<Long> ids) {
+    public Set<ProductDto> findAllByIds(@RequestParam Set<Long> ids) {
         return service.findAllByIds(ids);
     }
 
@@ -42,7 +42,6 @@ public class ProductController {
         return service.search(query);
     }
 
-    @Loggable
     @GetMapping("/{id}")
     public ProductDto findById(@PathVariable Long id) {
         return service.findById(id);

@@ -57,7 +57,7 @@ public class OrderOrchestrationTests {
         OrderItemShortRequest itemRequest = new OrderItemShortRequest(PRODUCT_ID, QUANTITY);
         CreateOrderShortRequest orderRequest = new CreateOrderShortRequest(NAME, EMAIL, List.of(itemRequest));
 
-        when(productClient.getProductsById(Set.of(PRODUCT_ID)))
+        when(productClient.getProductsByIds(Set.of(PRODUCT_ID)))
                 .thenReturn(Set.of(ACTIVE_PRODUCT));
         when(inventoryClient.reserveStock(any()))
                 .thenReturn(Set.of(SUCCESSFUL_RESERVE_RESPONSE));
@@ -66,7 +66,7 @@ public class OrderOrchestrationTests {
         assertThat(orderDto.id(), notNullValue());
         assertThat(orderDto.status(), is(OrderStatus.CONFIRMED.toString()));
 
-        verify(productClient).getProductsById(Set.of(PRODUCT_ID));
+        verify(productClient).getProductsByIds(Set.of(PRODUCT_ID));
         verify(inventoryClient).reserveStock(any());
         verify(inventoryClient, never()).releaseItems(any());
     }
@@ -77,7 +77,7 @@ public class OrderOrchestrationTests {
         CreateOrderShortRequest orderRequest =
                 new CreateOrderShortRequest(NAME, EMAIL, List.of(itemRequest, itemRequest));
 
-        when(productClient.getProductsById(Set.of(PRODUCT_ID)))
+        when(productClient.getProductsByIds(Set.of(PRODUCT_ID)))
                 .thenReturn(Set.of(ACTIVE_PRODUCT));
         when(inventoryClient.reserveStock(any()))
                 .thenReturn(Set.of(SUCCESSFUL_RESERVE_RESPONSE));
@@ -87,7 +87,7 @@ public class OrderOrchestrationTests {
         assertThat(order.items().size(), is(1));
         assertThat(order.items().getFirst().quantity(), is(QUANTITY * 2));
 
-        verify(productClient).getProductsById(any());
+        verify(productClient).getProductsByIds(any());
         verifyNoMoreInteractions(productClient);
 
         verify(inventoryClient).reserveStock(any());
@@ -103,7 +103,7 @@ public class OrderOrchestrationTests {
         ProductDto inactiveProduct = new ProductDto(PRODUCT_ID, "test", "test",
                 BigDecimal.valueOf(14.55), null, "path/img.jpeg", false);
 
-        when(productClient.getProductsById(Set.of(PRODUCT_ID)))
+        when(productClient.getProductsByIds(Set.of(PRODUCT_ID)))
                 .thenReturn(Set.of(inactiveProduct));
 
         List<OrderDto> ordersBefore = service.findAll();
@@ -121,7 +121,7 @@ public class OrderOrchestrationTests {
         OrderItemShortRequest itemRequest = new OrderItemShortRequest(PRODUCT_ID, QUANTITY);
         CreateOrderShortRequest orderRequest = new CreateOrderShortRequest(NAME, EMAIL, List.of(itemRequest));
 
-        when(productClient.getProductsById(Set.of(PRODUCT_ID)))
+        when(productClient.getProductsByIds(Set.of(PRODUCT_ID)))
                 .thenReturn(Set.of(ACTIVE_PRODUCT));
         when(inventoryClient.reserveStock(any()))
                 .thenThrow(OrderProcessingException.class);
@@ -141,7 +141,7 @@ public class OrderOrchestrationTests {
         OrderItemShortRequest itemRequest = new OrderItemShortRequest(PRODUCT_ID, QUANTITY);
         CreateOrderShortRequest orderRequest = new CreateOrderShortRequest(NAME, EMAIL, List.of(itemRequest));
 
-        when(productClient.getProductsById(Set.of(PRODUCT_ID)))
+        when(productClient.getProductsByIds(Set.of(PRODUCT_ID)))
                 .thenReturn(Set.of(ACTIVE_PRODUCT));
         when(inventoryClient.reserveStock(any()))
                 .thenReturn(Set.of(SUCCESSFUL_RESERVE_RESPONSE));
@@ -155,7 +155,7 @@ public class OrderOrchestrationTests {
         List<OrderDto> ordersAfter = service.findAll();
         assertThat(ordersBefore.size(), is(ordersAfter.size()));
 
-        verify(productClient).getProductsById(any());
+        verify(productClient).getProductsByIds(any());
         verify(inventoryClient).reserveStock(any());
         verify(inventoryClient).releaseItems(any());
     }

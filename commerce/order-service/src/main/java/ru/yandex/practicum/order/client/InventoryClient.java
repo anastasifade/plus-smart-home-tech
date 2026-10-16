@@ -15,5 +15,5 @@ public interface InventoryClient {
     Set<ReserveResponse> reserveStock(@RequestBody Set<ReserveRequest> request);
 
     @PostMapping("api/inventory/release/batch")
-    void releaseItems(@RequestBody Set<ReserveRequest> request);
+    Set<ReserveResponse> releaseItems(@RequestBody Set<ReserveRequest> request);
 }

@@ -106,14 +106,16 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional
-    public void releaseItems(Set<ReserveRequest> requests) {
+    public Set<ReserveResponse> releaseItems(Set<ReserveRequest> requests) {
         log.debug("Inventory service: request to release several reservations.");
-        requests.forEach(this::releaseItem);
+        return requests.stream()
+                .map(this::releaseItem)
+                .collect(Collectors.toSet());
     }
 
     @Override
     @Transactional
-    public void releaseItem(ReserveRequest request) {
+    public ReserveResponse releaseItem(ReserveRequest request) {
         log.debug("Inventory service: request to release reservation for product [id={}], quantity = {}.",
                 request.productId(), request.quantity());
 
@@ -132,6 +134,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         log.info("Reservation for product [id={}] released. Available quantity: {}.",
                 item.getProductId(), availableQuantity);
+        return InventoryMapper.toSuccessfulReleaseReserveResponse(availableQuantity);
     }
 
     private Inventory findInventoryItemForProduct(Long productId) {
