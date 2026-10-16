@@ -58,6 +58,12 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>ru.yandex.practicum</groupId>
+            <artifactId>common-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Тестирование -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

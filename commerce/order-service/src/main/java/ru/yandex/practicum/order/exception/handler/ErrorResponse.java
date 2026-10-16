@@ -1,4 +1,4 @@
-package ru.yandex.practicum.order.exception;
+package ru.yandex.practicum.order.exception.handler;
 
 import java.time.LocalDateTime;
 import java.util.Map;
