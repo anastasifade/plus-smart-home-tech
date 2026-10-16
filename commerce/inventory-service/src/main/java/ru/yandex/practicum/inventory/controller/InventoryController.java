@@ -47,7 +47,7 @@ public class InventoryController {
         return service.updateInventoryItem(request);
     }
 
-    @PutMapping("/reserve/batch")
+    @PostMapping("/reserve/batch")
     public Set<ReserveResponse> reserve(@Valid @RequestBody Set<ReserveRequest> requests) {
         return service.reserveItems(requests);
     }
