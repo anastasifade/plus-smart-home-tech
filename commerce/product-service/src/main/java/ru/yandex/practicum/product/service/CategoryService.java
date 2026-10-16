@@ -1,6 +1,6 @@
 package ru.yandex.practicum.product.service;
 
-import ru.yandex.practicum.product.dto.CategoryDto;
+import ru.yandex.practicum.common.CategoryDto;
 import ru.yandex.practicum.product.dto.CreateCategoryRequest;
 import ru.yandex.practicum.product.entity.Category;
 

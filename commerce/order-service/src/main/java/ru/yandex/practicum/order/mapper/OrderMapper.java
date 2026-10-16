@@ -1,9 +1,7 @@
 package ru.yandex.practicum.order.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.yandex.practicum.order.dto.CreateOrderRequest;
-import ru.yandex.practicum.order.dto.OrderDto;
-import ru.yandex.practicum.order.dto.OrderItemDto;
+import ru.yandex.practicum.order.dto.*;
 import ru.yandex.practicum.order.entity.Customer;
 import ru.yandex.practicum.order.entity.Order;
 import ru.yandex.practicum.order.enums.OrderStatus;
@@ -31,13 +29,21 @@ public class OrderMapper {
         );
     }
 
+    public CreateOrderRequest toFullRequest(CreateOrderShortRequest request, List<OrderItemRequest> items) {
+        return new CreateOrderRequest(
+                request.customerName().trim(),
+                request.customerEmail(),
+                items
+        );
+    }
+
     public Order toOrder(CreateOrderRequest request) {
-        Customer customer = new Customer(request.customerName().trim(), request.customerEmail());
+        Customer customer = new Customer(request.customerName(), request.customerEmail());
 
         Order order = new Order();
         order.setCustomer(customer);
-        order.setStatus(OrderStatus.CREATED);
-        order.setStatusDetails("Order created, confirmation pending.");
+        order.setStatus(OrderStatus.CONFIRMED);
+        order.setStatusDetails("Order confirmed");
         order.addItems(request.items()
                 .stream()
                 .map(OrderItemMapper::toItem)

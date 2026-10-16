@@ -13,10 +13,10 @@ public class LoggingAspect {
     @Around("@annotation(ru.yandex.practicum.common.logging.Loggable) " +
             "|| @within(ru.yandex.practicum.common.logging.Loggable)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.debug("Entering method: {}.", joinPoint.getSignature());
-        log.debug("Request parameters: {}.", joinPoint.getArgs());
+        log.info("Entering method: {}.", joinPoint.getSignature());
+        log.info("Request parameters: {}.", joinPoint.getArgs());
         Object result = joinPoint.proceed();
-        log.debug("Exiting method: {} - Response: {}.", joinPoint.getSignature(), result);
+        log.info("Exiting method: {} - Response: {}.", joinPoint.getSignature(), result);
         return result;
     }
 }

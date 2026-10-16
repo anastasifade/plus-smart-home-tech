@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.product.dto.CategoryDto;
+import ru.yandex.practicum.common.CategoryDto;
+import ru.yandex.practicum.common.ProductDto;
 import ru.yandex.practicum.product.dto.CreateProductRequest;
-import ru.yandex.practicum.product.dto.ProductDto;
 import ru.yandex.practicum.product.dto.UpdateProductRequest;
 import ru.yandex.practicum.product.entity.Category;
 import ru.yandex.practicum.product.entity.Product;
@@ -15,7 +15,10 @@ import ru.yandex.practicum.product.mapper.CategoryMapper;
 import ru.yandex.practicum.product.mapper.ProductMapper;
 import ru.yandex.practicum.product.repository.ProductRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,30 +30,36 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
 
     @Override
-    public List<ProductDto> findAll() {
+    public Set<ProductDto> findAll() {
         log.debug("Product service: request to find all products.");
         return toDto(repository.findByActive(true));
 
     }
 
     @Override
-    public List<ProductDto> findAllByCategory(Long categoryId) {
+    public Set<ProductDto> findAllByCategory(Long categoryId) {
         log.debug("Product service: request to find product in category [id = {}].", categoryId);
 
         CategoryDto category = categoryService.findById(categoryId);
         return repository.findByCategoryId(categoryId)
                 .stream()
                 .map(product -> ProductMapper.toDto(product, category))
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<ProductDto> search(String query) {
+    public Set<ProductDto> search(String query) {
         log.debug("Product service: request to search for products by name containing: \"{}\".", query);
         if (query.isBlank()) {
-            return List.of();
+            return Set.of();
         }
         return toDto(repository.findByNameContainingIgnoreCase(query));
+    }
+
+    @Override
+    public Set<ProductDto> findAllByIds(Set<Long> ids) {
+        log.debug("Product service: request to find all products with ids in: {}.", ids);
+        return toDto(repository.findAllById(ids));
     }
 
     @Override
@@ -101,11 +110,11 @@ public class ProductServiceImpl implements ProductService {
                 product.getCategory() != null ? CategoryMapper.toDto(product.getCategory()) : null);
     }
 
-    private List<ProductDto> toDto(List<Product> products) {
+    private Set<ProductDto> toDto(Collection<Product> products) {
         return products
                 .stream()
                 .map(product -> ProductMapper.toDto(product,
                         product.getCategory() != null ? CategoryMapper.toDto(product.getCategory()) : null))
-                .toList();
+                .collect(Collectors.toSet());
     }
 }

@@ -1,8 +1,8 @@
 package ru.yandex.practicum.inventory.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.yandex.practicum.common.ReserveResponse;
 import ru.yandex.practicum.inventory.dto.InventoryDto;
-import ru.yandex.practicum.inventory.dto.ReserveResponse;
 import ru.yandex.practicum.inventory.dto.UpdateInventoryRequest;
 import ru.yandex.practicum.inventory.entity.Inventory;
 
@@ -31,6 +31,14 @@ public class InventoryMapper {
                 true,
                 availableQuantity,
                 "Product successfully reserved."
+        );
+    }
+
+    public ReserveResponse toSuccessfulReleaseReserveResponse(Integer availableQuantity) {
+        return new ReserveResponse(
+                true,
+                availableQuantity,
+                "Reservation successfully released."
         );
     }
 }
