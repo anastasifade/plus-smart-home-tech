@@ -20,23 +20,4 @@ public class KafkaAggregatorConfig {
     private Map<String, String> producer;
     private Map<String, String> consumer;
     private KafkaAggregatorTopics topics;
-
-    public Properties getProducerProperties() {
-        Properties config = new Properties();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.putAll(producer);
-        return config;
-    }
-
-    public Properties getConsumerProperties() {
-        Properties config = new Properties();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.putAll(consumer);
-        return config;
-    }
-
-    @Bean
-    public KafkaAggregatorTopics getTopics() {
-        return topics;
-    }
 }

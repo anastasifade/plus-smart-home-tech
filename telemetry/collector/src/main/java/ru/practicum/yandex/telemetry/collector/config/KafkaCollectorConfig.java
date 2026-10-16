@@ -10,6 +10,7 @@ import java.util.Properties;
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "kafka")
 public class KafkaCollectorConfig {
+    private String bootstrapServers;
     private Properties properties;
     private KafkaCollectorTopics topics;
 }

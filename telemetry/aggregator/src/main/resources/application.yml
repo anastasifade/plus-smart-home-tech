@@ -1,20 +1,5 @@
 spring:
   application:
-    name: "smart-home-tech-collector"
-
-kafka:
-  bootstrap-servers: "localhost:9092"
-  producer:
-    "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
-    "value.serializer": "ru.yandex.practicum.telemetry.serialization.avro.serializer.SmartHomeTechAvroSerializer"
-  consumer:
-    "key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer"
-    "value.deserializer": "ru.yandex.practicum.telemetry.serialization.avro.deserializer.SensorEventDeserializer"
-    "group.id": "aggregator"
-  topics:
-    sensors: "telemetry.sensors.v1"
-    snapshots: "telemetry.snapshots.v1"
-
-logging:
-  level:
-    ru.yandex: DEBUG
+    name: "aggregator"
+  config:
+    import: configserver:http://localhost:8888

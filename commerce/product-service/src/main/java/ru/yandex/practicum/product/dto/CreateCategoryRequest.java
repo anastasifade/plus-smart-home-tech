@@ -2,14 +2,16 @@ package ru.yandex.practicum.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import ru.yandex.practicum.product.validation.NullOrNotBlank;
 
 public record CreateCategoryRequest(
 
-        @NotBlank(message = "Название категории обязательно")
-        @Size(max = 255, message = "Название категории не может быть длиннее 255 символов")
+        @NotBlank(message = "Category name is required.")
+        @Size(max = 255, message = "Category name cannot exceed 255 symbols.")
         String name,
 
-        @Size(max = 500, message = "Описание не может быть длиннее 500 символов")
+        @NullOrNotBlank(message = "Category description cannot be blank.")
+        @Size(max = 500, message = "Category description cannot exceed 500 symbols.")
         String description
 ) {
 }

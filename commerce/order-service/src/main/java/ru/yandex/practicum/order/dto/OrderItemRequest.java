@@ -9,18 +9,18 @@ import java.math.BigDecimal;
 
 public record OrderItemRequest(
 
-        @NotNull(message = "ID товара обязателен")
+        @NotNull(message = "Product ID is required.")
         Long productId,
 
-        @NotBlank(message = "Название товара обязательно")
+        @NotBlank(message = "Product name is required.")
         String productName,
 
-        @NotNull(message = "Количество обязательно")
-        @Min(value = 1, message = "Количество должно быть не менее 1")
+        @NotNull(message = "Item quantity is required.")
+        @Min(value = 1, message = "Item quantity cannot be less than 1.")
         Integer quantity,
 
-        @NotNull(message = "Цена обязательна")
-        @DecimalMin(value = "0.01", message = "Цена должна быть больше нуля")
+        @NotNull(message = "Price is required.")
+        @DecimalMin(value = "0.01", message = "Price must be above 0.00.")
         BigDecimal price
 ) {
 }
