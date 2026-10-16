@@ -58,13 +58,11 @@ public class InventoryController {
     }
 
     @PostMapping("/release/batch")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void release(@Valid @RequestBody Set<ReserveRequest> requests) {
         service.releaseItems(requests);
     }
 
     @PostMapping("/release")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void release(@Valid @RequestBody ReserveRequest request) {
         service.releaseItem(request);
     }

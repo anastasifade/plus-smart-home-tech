@@ -11,7 +11,6 @@ import ru.yandex.practicum.product.dto.CreateProductRequest;
 import ru.yandex.practicum.product.dto.UpdateProductRequest;
 import ru.yandex.practicum.product.service.ProductService;
 
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -24,8 +23,13 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public Set<ProductDto> findAll(@RequestParam(value = "ids", required = false) Set<Long> ids) {
-        return ids == null ? service.findAll() : service.findAllByIds(ids);
+    public Set<ProductDto> findAll() {
+        return service.findAll();
+    }
+
+    @GetMapping("/batch")
+    public Set<ProductDto> findAllByIds(@RequestBody Set<Long> ids) {
+        return service.findAllByIds(ids);
     }
 
     @GetMapping("/category/{categoryId}")
