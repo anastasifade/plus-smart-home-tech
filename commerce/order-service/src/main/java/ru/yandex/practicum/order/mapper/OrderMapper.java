@@ -29,20 +29,22 @@ public class OrderMapper {
         );
     }
 
-    public CreateOrderRequest toFullRequest(CreateOrderShortRequest request, List<OrderItemRequest> items) {
+    public CreateOrderRequest toFullRequest(CreateOrderShortRequest request, List<OrderItemRequest> items,
+                                            boolean isDegraded) {
         return new CreateOrderRequest(
                 request.customerName().trim(),
                 request.customerEmail(),
-                items
+                items,
+                isDegraded
         );
     }
 
-    public Order toOrder(CreateOrderRequest request) {
+    public Order toOrder(CreateOrderRequest request, OrderStatus status) {
         Customer customer = new Customer(request.customerName(), request.customerEmail());
 
         Order order = new Order();
         order.setCustomer(customer);
-        order.setStatus(OrderStatus.CONFIRMED);
+        order.setStatus(status);
         order.setStatusDetails("Order confirmed");
         order.addItems(request.items()
                 .stream()

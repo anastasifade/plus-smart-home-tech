@@ -12,6 +12,8 @@ public record CreateOrderRequest(
 
         String customerEmail,
 
-        List<OrderItemRequest> items
+        List<OrderItemRequest> items,
+
+        boolean isDegraded
 ) {
 }

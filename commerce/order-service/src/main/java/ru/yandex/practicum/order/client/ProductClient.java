@@ -8,7 +8,7 @@ import ru.yandex.practicum.common.ProductDto;
 
 import java.util.Set;
 
-@FeignClient(name = "product-service")
+@FeignClient(name = "product-service", fallbackFactory = ProductClientFallbackFactory.class)
 public interface ProductClient {
 
     @CollectionFormat(feign.CollectionFormat.CSV)

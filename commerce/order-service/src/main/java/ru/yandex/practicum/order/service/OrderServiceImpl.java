@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.order.dto.CreateOrderRequest;
 import ru.yandex.practicum.order.dto.OrderDto;
 import ru.yandex.practicum.order.entity.Order;
+import ru.yandex.practicum.order.enums.OrderStatus;
 import ru.yandex.practicum.order.exception.NotFoundException;
 import ru.yandex.practicum.order.mapper.OrderMapper;
 import ru.yandex.practicum.order.repository.OrderRepository;
@@ -47,7 +48,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(CreateOrderRequest request) {
         log.debug("Order service: request to create a new order.");
 
-        Order order = OrderMapper.toOrder(request);
+        OrderStatus status = request.isDegraded() ? OrderStatus.PENDING_CONFIRMATION : OrderStatus.CONFIRMED;
+
+        Order order = OrderMapper.toOrder(request, status);
         order.setTotalPrice(calculator.calculateTotal(order.getItems()));
         orderRepository.save(order);
 

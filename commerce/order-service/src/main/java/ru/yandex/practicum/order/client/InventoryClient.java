@@ -8,12 +8,12 @@ import ru.yandex.practicum.common.ReserveResponse;
 
 import java.util.Set;
 
-@FeignClient(name = "inventory-service")
+@FeignClient(name = "inventory-service", fallbackFactory = InventoryClientFallbackFactory.class)
 public interface InventoryClient {
 
     @PostMapping("/api/inventory/reserve/batch")
-    Set<ReserveResponse> reserveStock(@RequestBody Set<ReserveRequest> request);
+    Set<ReserveResponse> reserveStock(@RequestBody Set<ReserveRequest> requests);
 
     @PostMapping("api/inventory/release/batch")
-    Set<ReserveResponse> releaseItems(@RequestBody Set<ReserveRequest> request);
+    Set<ReserveResponse> releaseItems(@RequestBody Set<ReserveRequest> requests);
 }
