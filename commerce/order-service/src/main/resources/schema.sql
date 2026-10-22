@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS orders(
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     customer_name VARCHAR(255) NOT NULL,
     customer_email VARCHAR(255) NOT NULL,
-    status VARCHAR(16) NOT NULL,
+    status VARCHAR(32) NOT NULL,
     status_details VARCHAR(500),
     total_price NUMERIC(19, 2),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
