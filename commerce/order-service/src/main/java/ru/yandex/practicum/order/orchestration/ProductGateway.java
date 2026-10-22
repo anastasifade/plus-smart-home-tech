@@ -26,29 +26,29 @@ public class ProductGateway {
     public ProductGatewayResponse getValidProductsById(Set<Long> ids) {
         ServiceCallResult<Set<ProductDto>> productServiceCallResult = getProductsInfo(ids);
 
-        if (productServiceCallResult instanceof ServiceCallResult.Failure<Set<ProductDto>>(String message)) {
-            throw new OrderProcessingException(message);
+        switch (productServiceCallResult) {
+            case ServiceCallResult.Failure<Set<ProductDto>>(String message) ->
+                    throw new OrderProcessingException(message);
+            case ServiceCallResult.Success<Set<ProductDto>>(Set<ProductDto> products) -> {
+                validateAllProductsFound(ids, products);
+                validateAllProductsActive(products);
+
+                log.debug("All products found and validated.");
+                return new ProductGatewayResponse(toMap(products), false);
+            }
+            case ServiceCallResult.Degraded<Set<ProductDto>> degraded -> {
+                Set<ProductDto> degradedProducts = ids.stream()
+                        .map(id -> new ProductDto(id, "[PLACEHOLDER]", null, BigDecimal.valueOf(-1),
+                                null, null, null))
+                        .collect(Collectors.toSet());
+                log.debug("Product service unavailable, returning product placeholders.");
+                return new ProductGatewayResponse(toMap(degradedProducts), true);
+            }
+            default -> {
+                log.error("Unknown ServiceCallResult type: {}.", productServiceCallResult);
+                throw new IllegalArgumentException("Unknown ServiceCallResult type.");
+            }
         }
-
-        if (productServiceCallResult instanceof ServiceCallResult.Success<Set<ProductDto>>(Set<ProductDto> products)) {
-            validateAllProductsFound(ids, products);
-            validateAllProductsActive(products);
-
-            log.debug("All products found and validated.");
-            return new ProductGatewayResponse(toMap(products), false);
-        }
-
-        if (productServiceCallResult instanceof ServiceCallResult.Degraded<Set<ProductDto>> degraded) {
-            Set<ProductDto> degradedProducts = ids.stream()
-                    .map(id -> new ProductDto(id, "[PLACEHOLDER]", null, BigDecimal.valueOf(-1),
-                            null, null, null))
-                    .collect(Collectors.toSet());
-            log.debug("Product service unavailable, returning product placeholders.");
-            return new ProductGatewayResponse(toMap(degradedProducts), true);
-        }
-
-        log.error("Unknown ServiceCallResult type: {}.", productServiceCallResult);
-        throw new IllegalArgumentException("Unknown ServiceCallResult type.");
     }
 
     private ServiceCallResult<Set<ProductDto>> getProductsInfo(Set<Long> ids) {

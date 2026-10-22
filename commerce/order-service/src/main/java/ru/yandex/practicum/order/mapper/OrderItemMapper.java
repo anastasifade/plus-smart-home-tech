@@ -4,16 +4,14 @@ import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.common.ProductDto;
 import ru.yandex.practicum.order.dto.OrderItemDto;
 import ru.yandex.practicum.order.dto.OrderItemRequest;
-import ru.yandex.practicum.order.dto.OrderItemShortRequest;
 import ru.yandex.practicum.order.entity.OrderItem;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @UtilityClass
 public class OrderItemMapper {
 
-    private static int SCALE = 2;
+    private static final int SCALE = 2;
 
     public OrderItemDto toItemDto(OrderItem item) {
         return new OrderItemDto(

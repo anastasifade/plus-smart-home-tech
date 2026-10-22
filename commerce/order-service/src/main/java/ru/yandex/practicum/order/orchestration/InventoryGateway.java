@@ -9,7 +9,6 @@ import ru.yandex.practicum.order.client.InventoryClient;
 import ru.yandex.practicum.order.exception.*;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -38,7 +37,7 @@ public class InventoryGateway {
         try {
             Set<ReserveResponse> responses = client.releaseItems(requests);
             return new InventoryGatewayResponse(responses, false);
-        } catch (BadRequestException e) {
+        } catch (Exception e) {
             log.error("Failed to release reservation on items. Requests: {}. Error details: {}.",
                     requests, e.getMessage());
             throw new ReservationFailureException("Failed to release reservation on items.");

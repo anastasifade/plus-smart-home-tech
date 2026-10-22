@@ -47,12 +47,12 @@ public class InventoryClientFallbackFactory implements FallbackFactory<Inventory
                 throw new ServiceUnavailableException(("External service failure when requesting to release " +
                         "reservation on items with ids=" + productIds), cause);
             }
-        };
-    }
 
-    private List<Long> toProductIds(Collection<ReserveRequest> requests) {
-        return requests.stream()
-                .map(ReserveRequest::productId)
-                .toList();
+            private List<Long> toProductIds(Collection<ReserveRequest> requests) {
+                return requests.stream()
+                        .map(ReserveRequest::productId)
+                        .toList();
+            }
+        };
     }
 }
