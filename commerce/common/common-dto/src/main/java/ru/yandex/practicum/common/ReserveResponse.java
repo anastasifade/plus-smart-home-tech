@@ -1,4 +1,4 @@
-package ru.yandex.practicum.inventory.dto;
+package ru.yandex.practicum.common;
 
 public record ReserveResponse(
 

@@ -1,7 +1,7 @@
 package ru.yandex.practicum.product.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.yandex.practicum.product.dto.CategoryDto;
+import ru.yandex.practicum.common.CategoryDto;
 import ru.yandex.practicum.product.dto.CreateCategoryRequest;
 import ru.yandex.practicum.product.entity.Category;
 

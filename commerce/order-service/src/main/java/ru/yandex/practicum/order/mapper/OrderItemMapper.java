@@ -1,6 +1,7 @@
 package ru.yandex.practicum.order.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.yandex.practicum.common.ProductDto;
 import ru.yandex.practicum.order.dto.OrderItemDto;
 import ru.yandex.practicum.order.dto.OrderItemRequest;
 import ru.yandex.practicum.order.entity.OrderItem;
@@ -10,7 +11,7 @@ import java.math.RoundingMode;
 @UtilityClass
 public class OrderItemMapper {
 
-    private static int SCALE = 2;
+    private static final int SCALE = 2;
 
     public OrderItemDto toItemDto(OrderItem item) {
         return new OrderItemDto(
@@ -19,6 +20,15 @@ public class OrderItemMapper {
                 item.getProductName(),
                 item.getQuantity(),
                 item.getPrice().setScale(SCALE, RoundingMode.HALF_UP)
+        );
+    }
+
+    public OrderItemRequest toFullRequest(ProductDto product, int quantity) {
+        return new OrderItemRequest(
+                product.id(),
+                product.name(),
+                quantity,
+                product.price()
         );
     }
 

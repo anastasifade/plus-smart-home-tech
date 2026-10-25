@@ -4,18 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.common.ReserveRequest;
+import ru.yandex.practicum.common.ReserveResponse;
 import ru.yandex.practicum.inventory.dto.InventoryDto;
-import ru.yandex.practicum.inventory.dto.ReserveRequest;
-import ru.yandex.practicum.inventory.dto.ReserveResponse;
 import ru.yandex.practicum.inventory.dto.UpdateInventoryRequest;
 import ru.yandex.practicum.inventory.entity.Inventory;
 import ru.yandex.practicum.inventory.exception.InsufficientStockException;
 import ru.yandex.practicum.inventory.exception.ItemAlreadyExistsException;
 import ru.yandex.practicum.inventory.exception.NotFoundException;
+import ru.yandex.practicum.inventory.exception.ReservationReleaseException;
 import ru.yandex.practicum.inventory.mapper.InventoryMapper;
 import ru.yandex.practicum.inventory.repository.InventoryRepository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -71,6 +74,15 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional
+    public Set<ReserveResponse> reserveItems(Set<ReserveRequest> requests) {
+        log.debug("Inventory service: request to reserve multiple items.");
+        return requests.stream()
+                .map(this::reserveItem)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional
     public ReserveResponse reserveItem(ReserveRequest request) {
         log.debug("Inventory service: request to reserve product [id = {}], amount to reserve: {}.",
                 request.productId(), request.quantity());
@@ -80,7 +92,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         if (availableQuantity < request.quantity()) {
             log.info("Failed to reserve product [id = {}]: insufficient stock. Requested to reserve: {}. " +
-                            "Available: {}.", request.productId(), request.quantity(), availableQuantity);
+                    "Available: {}.", request.productId(), request.quantity(), availableQuantity);
             throw new InsufficientStockException(String.format("Cannot reserve product [id = %d]: insufficient stock." +
                     "Available amount: %d.", item.getId(), availableQuantity));
         }
@@ -90,6 +102,39 @@ public class InventoryServiceImpl implements InventoryService {
 
         log.info("Product [id = {}] reserved. Available amount left: {}.", item.getId(), availableQuantity);
         return InventoryMapper.toSuccessfulReserveResponse(availableQuantity);
+    }
+
+    @Override
+    @Transactional
+    public Set<ReserveResponse> releaseItems(Set<ReserveRequest> requests) {
+        log.debug("Inventory service: request to release several reservations.");
+        return requests.stream()
+                .map(this::releaseItem)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional
+    public ReserveResponse releaseItem(ReserveRequest request) {
+        log.debug("Inventory service: request to release reservation for product [id={}], quantity = {}.",
+                request.productId(), request.quantity());
+
+        Inventory item = findInventoryItemForProduct(request.productId());
+
+        if (item.getReservedQuantity() < request.quantity()) {
+            log.info("Failed to release reservation for product [id={}]. " +
+                            "Request to release reservation for quantity: {}. Reserved quality: {}.",
+                    request.productId(), request.quantity(), item.getReservedQuantity());
+            throw new ReservationReleaseException(String.format("Could not release reservation for product [id=%d]. " +
+                    "Request to release amount higher than items currently reserved.", request.productId()));
+        }
+
+        item.setReservedQuantity(item.getReservedQuantity() - request.quantity());
+        Integer availableQuantity = getAvailableQuantity(item);
+
+        log.info("Reservation for product [id={}] released. Available quantity: {}.",
+                item.getProductId(), availableQuantity);
+        return InventoryMapper.toSuccessfulReleaseReserveResponse(availableQuantity);
     }
 
     private Inventory findInventoryItemForProduct(Long productId) {
