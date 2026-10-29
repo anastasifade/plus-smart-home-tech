@@ -103,5 +103,19 @@ spring:
           predicates:
             - Path=/api/orders/**
 
+app:
+  security:
+    users:
+      - username: ivan
+        password: ivan
+        roles:
+          - USER
+
+      - username: anna
+        password: anna
+        roles:
+          - USER
+          - ADMIN
+
 server:
   port: 8080
